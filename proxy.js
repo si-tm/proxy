@@ -14,9 +14,16 @@ app.get('/beacon.jpg/:b64url', async (req, res) => {
 
     // 127.0.0.1やlocalhostを外部アクセス可能なFQDNに置換
     // ※ /flag へのアクセスはここが重要
+    // target = target
+    //   .replace('127.0.0.1:50000', 'memo4b.challenges.beginners.seccon.jp:50000')
+    //   .replace('localhost:50000', 'memo4b.challenges.beginners.seccon.jp:50000');
+
+    // 5000 → 50000 へ修正
     target = target
-      .replace('127.0.0.1:50000', 'memo4b.challenges.beginners.seccon.jp:50000')
-      .replace('localhost:50000', 'memo4b.challenges.beginners.seccon.jp:50000');
+    .replace('127.0.0.1:5000', 'memo4b.challenges.beginners.seccon.jp:50000')
+    .replace('localhost:5000', 'memo4b.challenges.beginners.seccon.jp:50000')
+    .replace('127.0.0.1:50000', 'memo4b.challenges.beginners.seccon.jp:50000')
+    .replace('localhost:50000', 'memo4b.challenges.beginners.seccon.jp:50000');
 
     const urlObj = new URL(target);
 
