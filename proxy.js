@@ -10,9 +10,9 @@ const WEBHOOK_URL = 'https://webhook.site/42cc307-ab4c-4429-b966-c3e0c0995f3e'; 
 app.get('/proxy', async (req, res) => {
   const target = req.query.url;
 
-  if (!target || !target.startsWith('http://127.0.0.1')) {
-    return res.status(400).send('Invalid target');
-  }
+  // if (!target || !target.startsWith('http://127.0.0.1')) {
+  //   return res.status(400).send('Invalid target');
+  // }
 
   try {
     const flagRes = await fetch(target, {
