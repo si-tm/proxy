@@ -5,7 +5,8 @@ import fetch from 'node-fetch';
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-const WEBHOOK_URL = 'https://webhook.site/42cc307-ab4c-4429-b966-c3e0c0995f3e'; // あなたのWebhookに置き換えてください
+// const WEBHOOK_URL = 'https://webhook.site/42cc307-ab4c-4429-b966-c3e0c0995f3e'; // あなたのWebhookに置き換えてください
+const WEBHOOK_URL = 'https://eoa0a3qqgsiiqb4.m.pipedream.net';
 
 app.get('/proxy', async (req, res) => {
   const target = req.query.url;
