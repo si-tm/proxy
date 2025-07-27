@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: ssrf-proxy
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node proxy.js
