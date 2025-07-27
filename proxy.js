@@ -1,26 +1,21 @@
-// proxy.js
 import express from 'express';
 import fetch from 'node-fetch';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// const WEBHOOK_URL = 'https://webhook.site/42cc307-ab4c-4429-b966-c3e0c0995f3e'; // あなたのWebhookに置き換えてください
 const WEBHOOK_URL = 'https://eoa0a3qqgsiiqb4.m.pipedream.net';
 
 app.get('/proxy', async (req, res) => {
   const target = req.query.url;
-
-  if (!target) {
-    return res.status(400).send('Missing url parameter');
-  }
+  if (!target) return res.status(400).send('Missing url parameter');
 
   try {
     console.log('[proxy] Fetching target:', target);
 
     const flagRes = await fetch(target, {
       headers: {
-        cookie: 'user=admin' // botが必要条件を満たすように
+        cookie: 'user=admin'
       }
     });
 
@@ -33,8 +28,6 @@ app.get('/proxy', async (req, res) => {
       headers: { 'Content-Type': 'text/plain' }
     });
 
-    console.log('[proxy] webhook response status:', webhookRes.status);
-
     if (!webhookRes.ok) {
       const text = await webhookRes.text();
       console.error('[proxy] webhook post failed:', text);
@@ -46,6 +39,25 @@ app.get('/proxy', async (req, res) => {
     console.error('[proxy] error:', err);
     res.status(500).send('Error fetching target');
   }
+});
+
+// 🔽 新しく追加：BotをリダイレクトさせるHTMLを返すエンドポイント
+app.get('/redirect', (req, res) => {
+  const target = req.query.url;
+
+  if (!target) return res.status(400).send('Missing url parameter');
+
+  res.set('Content-Type', 'text/html');
+  res.send(`
+    <html>
+      <head>
+        <meta http-equiv="refresh" content="0;url=${target}">
+      </head>
+      <body>
+        <p>Redirecting to ${target}</p>
+      </body>
+    </html>
+  `);
 });
 
 app.listen(PORT, () => {
