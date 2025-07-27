@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 8080;
 
 const WEBHOOK_URL = 'https://eoa0a3qqgsiiqb4.m.pipedream.net';
 
-// 新バージョン: base64でURLをパスとして渡す形式
+// base64でURLをパスとして渡す形式
 app.get('/beacon.jpg/:b64url', async (req, res) => {
   try {
     const target = Buffer.from(req.params.b64url, 'base64').toString();
@@ -35,4 +35,8 @@ app.get('/beacon.jpg/:b64url', async (req, res) => {
     console.error('[beacon-path] error:', err);
     res.status(500).send('error');
   }
+});
+
+app.listen(PORT, () => {
+  console.log(`Proxy server running on port ${PORT}`);
 });
